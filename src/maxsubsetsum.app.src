@@ -1,0 +1,12 @@
+{application, maxsubsetsum,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { maxsubsetsum_app, []}},
+  {env, []}
+ ]}.
