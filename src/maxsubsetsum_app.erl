@@ -3,7 +3,7 @@
 -behaviour(application).
 
 %% Application callbacks
--export([start/2, stop/1, combinationsOfSizeN/5]).
+-export([start/2, stop/1, simpleCombo/3]).
 
 %% ===================================================================
 %% Application callbacks
@@ -15,34 +15,25 @@ start(_StartType, _StartArgs) ->
 stop(_State) ->
 	ok.
 
-%combinationsOfSizeN([], _, _, _) ->
-%	[].
 
-%generateNextSet(SourceArray, ResultsArray, TemporaryHoldingArray, RequiredCombinationSize, IndexIntoSourceArray) ->
-%	NewTemporaryHoldingArray=[array:get(IndexIntoSourceArray, SourceArray)|ResultsArray],
-%	combinationsOfSizeN(SourceArray, ResultsArray, NewTemporaryHoldingArray, RequiredCombinationSize, IndexIntoSourceArray).
+% perms(L)  -> [[H|T] || H <- L, T <- perms(L--[H])].
+% perms([]) -> [[]];
+% 
+% L in list
+% Result temporary result
+% r - size of the combo
+simpleCombo(_, Result, R) when length(Result) == R ->
+	io:format("##", []), erlang:display(lists:reverse(Result)), io:format("~n"),
+	lists:reverse(Result);
 
-%combinationsOfSizeN(SourceArray, ResultsArray, TemporaryHoldingArray, RequiredCombinationSize, IndexIntoSourceArray) ->
-%	case size(TemporaryHoldingArray) == RequiredCombinationSize of
-%		true  -> TemporaryHoldingArray;
-%		false -> R = generateNextSet(SourceArray, ResultsArray, TemporaryHoldingArray, RequiredCombinationSize, IndexIntoSourceArray + 1),
-%			 [R|ResultsArray]
-%			
-%	end.
+simpleCombo(L, Result, R) when length(L) < R ->
+	io:format("2*~n", []),
+	lists:reverse(Result);
 
-
-genPerms(SourceArray,_, TemporaryHoldingArray, _, IndexIntoSourceArray)  when length(SourceArray) == IndexIntoSourceArray ->
-	TemporaryHoldingArray;
-genPerms(SourceArray, Results, TemporaryHoldingArray, RequiredCombinationSize, IndexIntoSourceArray) ->
-	combinationsOfSizeN(SourceArray, Results,TemporaryHoldingArray, RequiredCombinationSize, IndexIntoSourceArray+1).
-
-combinationsOfSizeN(SourceArray, Results,  TemporaryHoldingArray, RequiredCombinationSize, IndexIntoSourceArray) ->
-	io:format("- ~w ~n", [IndexIntoSourceArray]),
-	case length(TemporaryHoldingArray) == RequiredCombinationSize of
-		true  -> TemporaryHoldingArray;
-		false -> NewTemporaryHoldingArray=[lists:nth(IndexIntoSourceArray, SourceArray)|TemporaryHoldingArray],
-			genPerms(SourceArray, Results, NewTemporaryHoldingArray, RequiredCombinationSize, IndexIntoSourceArray)
-	end.
+simpleCombo(L, Result, R) ->
+	io:format("1*", []), erlang:display(L), io:format("##"), erlang:display(lists:reverse(Result)), io:format("~n"),
+	[_|T] = L,
+	[[simpleCombo(T,[X|Result],R) || X <- L]].
 
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
