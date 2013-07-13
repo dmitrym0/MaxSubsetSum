@@ -25,3 +25,8 @@ Note that at this time I don't yet know how to make this work nicely from comman
 1. maxsubsetsum_app:findSums([1,2,3,4,6]). # run the solution
 
 The output will be the list of subsets that satisfy the problem statement.
+
+## Exaple:
+
+	18> maxsubsetsum_app:findSums([1,2,3,4,6]).
+	[[1,2],[1,3],[2,4],[1,2,3]]
