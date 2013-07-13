@@ -3,7 +3,7 @@
 -behaviour(application).
 
 %% Application callbacks
--export([start/2, stop/1, simpleCombo/2]).
+-export([start/2, stop/1, simplePermute/2, generateAllCombos/1]).
 
 %% ===================================================================
 %% Application callbacks
@@ -21,14 +21,22 @@ index_of(_, [], _)  -> not_found;
 index_of(Item, [Item|_], Index) -> Index;
 index_of(Item, [_|Tl], Index) -> index_of(Item, Tl, Index+1).
 
+% generate all combinations of size 2..legnth(L)-1
+generateAllCombos(L) ->
+	NewL=L--[lists:last(L)],
+	Sizes=lists:seq(2,length(NewL)),
+	lists:flatmap(fun(X) -> simplePermute(NewL,X) end, Sizes).
+
+
+
+
 
 % generate a list of permutations of size R from list L
-simpleCombo(_,R) when R == 0 ->
-	io:format("*2~n"),
+simplePermute(_,R) when R == 0 ->
 	[[]];
 
-simpleCombo(L,R) ->
-	[[X|T] || X <- L, T<-simpleCombo(lists:nthtail(index_of(X,L),L),R-1)].
+simplePermute(L,R) ->
+	[[X|T] || X <- L, T<-simplePermute(lists:nthtail(index_of(X,L),L),R-1)].
 
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
